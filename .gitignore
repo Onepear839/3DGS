@@ -1,0 +1,49 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+*.egg-info/
+dist/
+build/
+
+# 虚拟环境
+relay/
+env/
+venv/
+.venv/
+
+# 输出文件
+output/
+*.ply
+*.pth
+
+# 数据集
+data/
+datasets/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 大文件
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# Colab 检查点
+*.ipynb_checkpoints/
+
+pictures/
+SIBR_viewers/
+lpipsPyTorch/
+results.md
+submodules/
