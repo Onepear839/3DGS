@@ -49,13 +49,13 @@
 
 其中VGG感知损失使用**预训练VGG16网络**提取多层特征，计算特征空间的L1距离：
 
-`
+```
 输入图像 → VGG16 → [relu1_2, relu2_2, relu3_3] 特征图
                                   ↓
                         计算各层L1距离加权求和
                                   ↓
                            感知损失值
-`
+```
 
 ### 实现代码
 
@@ -67,13 +67,13 @@
 
 ### 使用方法
 
-`ash
+```bash
 # 原始3DGS训练（不使用感知损失）
 python train.py -s <数据集路径> --lambda_vgg 0
 
 # 改进版3DGS训练（启用VGG感知损失，推荐λ=0.1~0.3）
 python train.py -s <数据集路径> --lambda_vgg 0.2
-`
+```
 
 ### 预期效果对比
 
@@ -98,7 +98,7 @@ python train.py -s <数据集路径> --lambda_vgg 0.2
 
 ### 安装步骤
 
-`ash
+```bash
 # 克隆项目（包含子模块）
 git clone https://github.com/graphdeco-inria/gaussian-splatting.git --recursive
 cd gaussian-splatting
@@ -111,41 +111,41 @@ conda activate gaussian_splatting
 pip install submodules/diff-gaussian-rasterization
 pip install submodules/simple-knn
 pip install submodules/fused-ssim
-`
+```
 
 ### 数据准备
 
 #### 方式A：使用示例数据集
 
-`ash
+```bash
 # 下载Truck场景数据集
 wget https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/datasets/input/tandt_db.zip
 unzip tandt_db.zip -d data/
-`
+```
 
 #### 方式B：使用自己的照片
 
-`
+```
 your_dataset/
 ├── input/       ← 原始照片（JPEG/PNG）
 └── ...
-`
+```
 
 然后使用COLMAP处理：
 
-`ash
+```bash
 python convert.py -s <your_dataset_path>
-`
+```
 
 ### 训练
 
-`ash
+```bash
 # 原始版
 python train.py -s data/truck -m output/truck_original --lambda_vgg 0
 
 # 改进版（使用VGG感知损失）
 python train.py -s data/truck -m output/truck_improved --lambda_vgg 0.2
-`
+```
 
 ### 训练参数说明
 
@@ -163,19 +163,19 @@ python train.py -s data/truck -m output/truck_improved --lambda_vgg 0.2
 
 ### 评估
 
-`ash
+```bash
 # 渲染新视图
 python render.py -m output/truck_improved
 
 # 计算评估指标（PSNR, SSIM, LPIPS）
 python metrics.py -m output/truck_improved
-`
+```
 
 ---
 
 ## 📊 完整评估流程
 
-`ash
+```bash
 # 训练（训练/测试集划分）
 python train.py -s <数据集路径> --eval
 
@@ -184,13 +184,13 @@ python render.py -m <模型路径>
 
 # 计算指标
 python metrics.py -m <模型路径>
-`
+```
 
-也可以使用 ull_eval.py 一键完成完整评估：
+也可以使用 full_eval.py 一键完成完整评估：
 
-`ash
+```bash
 python full_eval.py -m360 <mipnerf360路径> -tat <tanks&temples路径> -db <deep blending路径>
-`
+```
 
 ---
 
@@ -198,19 +198,19 @@ python full_eval.py -m360 <mipnerf360路径> -tat <tanks&temples路径> -db <dee
 
 ### 实时查看器
 
-`ash
+```bash
 <SIBR安装目录>/bin/SIBR_gaussianViewer_app -m <模型路径>
-`
+```
 
 ### 网络查看器（连接训练进程）
 
-`ash
+```bash
 # 终端1：启动训练
 python train.py -s <数据集路径>
 
 # 终端2：启动查看器
 <SIBR安装目录>/bin/SIBR_remoteGaussian_app
-`
+```
 
 ---
 
@@ -231,7 +231,7 @@ python train.py -s <数据集路径>
 
 ## 📁 训练输出结构
 
-`
+```
 output/<模型文件夹>/
 ├── point_cloud/                    ← 3D高斯点云模型
 │   ├── iteration_7000/
@@ -247,13 +247,13 @@ output/<模型文件夹>/
 └── test/ours_30000/
     ├── renders/                    ← 测试集渲染结果
     └── gt/                         ← 测试集真实图像
-`
+```
 
 ---
 
 ## 📚 引用
 
-`ibtex
+```bibtex
 @Article{kerbl3Dgaussians,
       author       = {Kerbl, Bernhard and Kopanas, Georgios and Leimk{\"u}hler, Thomas and Drettakis, George},
       title        = {3D Gaussian Splatting for Real-Time Radiance Field Rendering},
@@ -264,22 +264,7 @@ output/<模型文件夹>/
       year         = {2023},
       url          = {https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/}
 }
-`
-
----
-
-## 📝 参考文献（课程大作业相关）
-
-1. Kerbl B, et al. 3D Gaussian Splatting for Real-Time Radiance Field Rendering. SIGGRAPH 2023.
-2. Mildenhall B, et al. NeRF: Representing Scenes as Neural Radiance Fields. ECCV 2020.
-3. Johnson J, et al. Perceptual Losses for Real-Time Style Transfer and Super-Resolution. ECCV 2016.
-4. Zhang R, et al. The Unreasonable Effectiveness of Deep Features as a Perceptual Metric. CVPR 2018.
-5. Simonyan K, et al. Very Deep Convolutional Networks for Large-Scale Image Recognition. ICLR 2015.
-6. Barron J, et al. Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields. CVPR 2022.
-7. Yu Z, et al. Point-NeRF: Point-based Neural Radiance Fields. CVPR 2022.
-8. Deng J, et al. ImageNet: A Large-Scale Hierarchical Image Database. CVPR 2009.
-9. Fridovich-Keil S, et al. Plenoxels: Radiance Fields without Neural Networks. CVPR 2022.
-10. Müller T, et al. Instant Neural Graphics Primitives with a Multiresolution Hash Encoding. SIGGRAPH 2022.
+```
 
 ---
 
@@ -293,10 +278,10 @@ output/<模型文件夹>/
 <details>
 <summary><strong>Q: Windows上编译submodules失败？</summary>
 确保先安装Visual Studio，然后按顺序执行：
-`
+```
 pip install submodules\\diff-gaussian-rasterization
 pip install submodules\\simple-knn
-`
+```
 </details>
 
 <details>
